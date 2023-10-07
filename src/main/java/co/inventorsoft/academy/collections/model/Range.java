@@ -1,7 +1,5 @@
 package co.inventorsoft.academy.collections.model;
 
-import java.util.AbstractList;
-import java.util.AbstractSet;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -46,9 +44,8 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         this.start = start;
         this.end = end;
         this.incrementor = incrementor;
+        this.comparator = Comparator.naturalOrder();
     }
-
-
 
     public static <T extends Comparable<T>> Range<T> of(T start, T end) {
         if (start != null && start.compareTo(end) > 0) {
@@ -72,7 +69,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         } else if (current instanceof Character) {
             return (T) (Character) ((char) ((Character) current + 1));
         } else if (current instanceof Float) {
-            return (T) Float.valueOf(Math.round(((Float) current + 0.01f) * 100f) / 100f);
+            return (T) Float.valueOf(((Float) current + 0.1f));
 
         }
         throw new UnsupportedOperationException("Unsupported type");
@@ -115,8 +112,6 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         return count;
     }
 
-
-
     public boolean isEmpty() {
         return start.equals(end);
     }
@@ -137,7 +132,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
 
             @Override
             public boolean hasNext() {
-                return comparator.compare(successor(current), (T) end) <= 0;
+                return comparator.compare(current, (T) end) <= 0;
             }
 
             @Override
@@ -152,8 +147,6 @@ public class Range<T extends Comparable<T>> implements Set<T> {
             }
         };
     }
-
-
     public Object[] toArray() {
         int size = size();
         Object[] array = new Object[size];
